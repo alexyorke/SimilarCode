@@ -8,14 +8,14 @@ using SimilarCode.Load.Repositories;
 
 namespace SimilarCode.Match
 {
-    internal class Program
+    public class Program
     {
-        private static BlockingCollection<string> _snippetsToCheck = new(50_000);
-        private static string ProgressBar = "";
+        private BlockingCollection<string> _snippetsToCheck = new(50_000);
+        private string ProgressBar = "";
 
-        private static async Task GetAnswers()
+        private async Task GetAnswers(string similarCodeDatabasePath)
         {
-            using var answersRepo = new AnswersRepository(@"L:\stackoverflow\SimilarCode.db");
+            using var answersRepo = new AnswersRepository(similarCodeDatabasePath);
             var context = answersRepo.GetContext();
             context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
 
@@ -54,13 +54,11 @@ namespace SimilarCode.Match
             _snippetsToCheck.CompleteAdding();
         }
 
-        private static async Task Main(string[] args)
+        public async Task<Tuple<string, int>> Start(string needle, string databasePath)
         {
-            Task getSnippets = new(() => GetAnswers(), TaskCreationOptions.LongRunning);
+            Task getSnippets = new(() => GetAnswers(databasePath), TaskCreationOptions.LongRunning);
             getSnippets.Start();
             
-            var needle =
-                "public static void compressFile(string inFile, string outFile){\nSystem.IO.FileStream outFileStream = new System.IO.FileStream(outFile, System.IO.FileMode.Create);\r\n            zlib.ZOutputStream outZStream = new zlib.ZOutputStream(outFileStream, zlib.zlibConst.Z_DEFAULT_COMPRESSION);\r\n            System.IO.FileStream inFileStream = new System.IO.FileStream(inFile, System.IO.FileMode.Open);\r\n            try\r\n            {\r\n                CopyStream(inFileStream, outZStream);\r\n\t\t\t\toutZStream.finish();\r\n            }\r\n            finally\r\n            {\r\n                outZStream.Close();\r\n                outFileStream.Close();\r\n                inFileStream.Close();\r\n            }\r\n        }";
             needle = needle.ToLower();
             needle = needle.Replace("\r\n", "\n");
             var needleLineCount = needle.Split('\n').Length;
@@ -87,7 +85,7 @@ namespace SimilarCode.Match
             await Task.WhenAll(getSnippets);
 
             var bestSnippet = bestSnippets.ToList().OrderBy(c => c.Item2).FirstOrDefault();
-            Console.WriteLine(bestSnippet);
+            return bestSnippet;
         }
     }
 }

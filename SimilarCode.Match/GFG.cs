@@ -247,6 +247,18 @@ namespace SimilarCode.Match
             return ret;
         }
 
-        
+        public static decimal GetMinimumPenaltyAsPercent(ReadOnlySpan<char> x, ReadOnlySpan<char> y, int pxy = 3, int pgap = 2)
+        {
+            int worstPossibleScore = (int)(Math.Max(pxy, pgap) * Math.Max(x.Length, y.Length));
+            var computedScore = GetMinimumPenaltyOptimizedMem(x, y, pxy, pgap);
+            if (worstPossibleScore == 0) return 0;
+
+            var finalScore = (decimal)Math.Pow(((worstPossibleScore - computedScore) / (double)worstPossibleScore), 2);
+
+            // this should never occur, but if it does, then set it to maximum possible score
+            if (finalScore > 1) finalScore = 1;
+            if (finalScore < 0) finalScore = 0;
+            return finalScore;
+        }
     }
 }
