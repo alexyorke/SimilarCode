@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SimilarCode.Compression\SimilarCode.Compression.csproj" />
     <ProjectReference Include="..\SimilarCode.Load.Cli\SimilarCode.Load.Cli.csproj" />
     <ProjectReference Include="..\SimilarCode.Load\SimilarCode.Load.csproj" />
   </ItemGroup>

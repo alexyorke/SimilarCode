@@ -62,13 +62,18 @@ namespace SimilarCode.Match
             needle = needle.ToLower();
             needle = needle.Replace("\r\n", "\n");
             var needleLineCount = needle.Split('\n').Length;
-            
+            var mustMatchSubstr = Compress.FindLeastCompressableSubstring(needle.Replace(" ", "").Replace("\t", "").AsSpan(), 5).ToString();
+
             var bestSnippets = new ConcurrentBag<Tuple<string, int>>();
 
             int lowestPenalty = -1;
-            _snippetsToCheck.GetConsumingEnumerable().AsParallel().WithDegreeOfParallelism(4).ForAll(snippet =>
+            _snippetsToCheck.GetConsumingEnumerable().AsParallel().WithDegreeOfParallelism(2).ForAll(snippet =>
             {
                 if (Math.Abs(snippet.Split('\n').Length - needleLineCount) > 8) return;
+
+                // optimization: check if highest entropy substring exists within snippet
+                //if (!snippet.ToLower().Replace(" ", "").Replace("\t", "").Contains(mustMatchSubstr)) return;
+
                 var penalty = Gfg.GetMinimumPenaltyOptimizedMem(needle,
                     snippet.AsSpan());
 
@@ -84,7 +89,7 @@ namespace SimilarCode.Match
 
             await Task.WhenAll(getSnippets);
 
-            var bestSnippet = bestSnippets.ToList().OrderBy(c => c.Item2).FirstOrDefault();
+            var bestSnippet = bestSnippets.ToList().MinBy(c => c.Item2);
             return bestSnippet;
         }
     }

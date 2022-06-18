@@ -8,12 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentArgs" Version="0.9.7" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\SimilarCode.Compression\SimilarCode.Compression.csproj" />
-    <ProjectReference Include="..\SimilarCode.Load\SimilarCode.Load.csproj" />
     <ProjectReference Include="..\SimilarCode.Match\SimilarCode.Match.csproj" />
   </ItemGroup>
 

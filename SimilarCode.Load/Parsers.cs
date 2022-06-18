@@ -11,7 +11,7 @@ namespace SimilarCode.Load
     internal class StackOverflowSnippetExtractor : ISnippetExtractor
     {
         private static readonly Regex CodeBlocksMatcher = new(
-            "(?:<pre>|<pre class=\\\"[A-Za-z0-9 \\-_]+\\\">)<code>(.*?)</code></pre>",
+            @"(?:<pre>|<pre class=\""[A-Za-z0-9 \-_]+\"">)<code>(.*?)</code></pre>",
             RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
         public IEnumerable<CodeSnippetGrouping> Extract(string content)
         {

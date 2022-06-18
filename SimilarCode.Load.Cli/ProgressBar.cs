@@ -34,7 +34,7 @@ namespace SimilarCode.Load.Cli
         public void Report(double value)
         {
             // Make sure value is in [0..1] range
-            value = Math.Max(0, Math.Min(1, value));
+            value = Math.Clamp(value, 0, 1);
             Interlocked.Exchange(ref currentProgress, value);
         }
 
