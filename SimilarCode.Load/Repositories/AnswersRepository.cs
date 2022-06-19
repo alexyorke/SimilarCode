@@ -16,6 +16,11 @@ namespace SimilarCode.Load.Repositories
             _context.Database.EnsureCreated();
         }
 
+        public AnswersContext Context
+        {
+            get { return _context; }
+        }
+
         public async Task AddRangeAsync(IEnumerable<Answer> answers)
         {
             _context.Answers.AddRange(answers);
@@ -29,7 +34,7 @@ namespace SimilarCode.Load.Repositories
 
         public void Dispose()
         {
-            _context?.Dispose();
+            
         }
     }
 }

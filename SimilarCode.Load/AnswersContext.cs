@@ -20,5 +20,10 @@ namespace SimilarCode.Load
         {
             options.UseSqlite($"Data Source={DbPath}");
         }
+
+        public void Dispose()
+        {
+            this?.Dispose();
+        }
     }
 }

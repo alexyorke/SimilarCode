@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SimilarCode.Match
 {
-    internal static class Extensions
+    internal static partial class Extensions
     {
         public static IEnumerable<string> Split(string str, int chunkSize)
         {
