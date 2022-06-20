@@ -3,6 +3,8 @@
     internal enum DatabaseType
     {
         SevenZip = 1,
-        Uncompressed = 2
+        Uncompressed = 2,
+        SevenZipFast,
+        UncompressedFast
     }
 }

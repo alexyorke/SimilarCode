@@ -21,8 +21,8 @@ namespace SimilarCode.Load
                 var ext = Path.GetExtension(cliOptions.SoPostsPath).ToUpperInvariant();
                 IPostsRepository postsRepository = ext switch
                 {
-                    ".7Z" => PostsRepositoryFactory.GetRepository(cliOptions.SoPostsPath, DatabaseType.SevenZip),
-                    ".XML" => PostsRepositoryFactory.GetRepository(cliOptions.SoPostsPath, DatabaseType.Uncompressed),
+                    ".7Z" => PostsRepositoryFactory.GetRepository(cliOptions.SoPostsPath, DatabaseType.SevenZipFast),
+                    ".XML" => PostsRepositoryFactory.GetRepository(cliOptions.SoPostsPath, DatabaseType.UncompressedFast),
                     _ => throw new InvalidDataException(
                         $"The database with extension {ext} does not have an associated provider.")
                 };
@@ -55,6 +55,8 @@ namespace SimilarCode.Load
                 answerProgressItem.Item.CodeSnippetGroups = codeSnippetGroupings;
                 dbWriter.Add(answerProgressItem);
             });
+
+            dbWriter.CompleteAdding();
 
             await readAnswersRunner;
 

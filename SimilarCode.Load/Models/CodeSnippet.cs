@@ -12,5 +12,6 @@ namespace SimilarCode.Load.Models
         public string Content { get; set; }
         public List<ProgrammingLanguage> ProgrammingLanguage { get; set; } = new();
         public CodeSnippetGrouping CodeSnippetGrouping { get; set; }
+        public string ContentLowerNoWhitespace { get; set; }
     }
 }

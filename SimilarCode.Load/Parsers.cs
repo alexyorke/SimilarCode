@@ -10,6 +10,7 @@ namespace SimilarCode.Load
 {
     internal class StackOverflowSnippetExtractor : ISnippetExtractor
     {
+        private static readonly Regex RemoveWhitespace = new(@"\s+",  RegexOptions.Compiled);
         private static readonly Regex CodeBlocksMatcher = new(
             @"(?:<pre>|<pre class=\""[A-Za-z0-9 \-_]+\"">)<code>(.*?)</code></pre>",
             RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
@@ -26,7 +27,7 @@ namespace SimilarCode.Load
             {
                 CodeSnippets = codeBlocks
                     .Select(c => Cleanup(c))
-                    .Select(codeBlock => new CodeSnippet { Content = codeBlock }).ToList()
+                    .Select(codeBlock => new CodeSnippet { Content = codeBlock, ContentLowerNoWhitespace = RemoveWhitespace.Replace(codeBlock, "").ToLowerInvariant() }).ToList()
             };
         }
 
