@@ -12,9 +12,9 @@ namespace SimilarCode.Match.Cli
             const bool debug = true;
             var debugCliOptions = new CliOptions
             {
-                DbPath = @"C:\Users\Alex Yorke\Desktop\SimilarCode.db",
+                DbPath = @"C:\Users\Alex Yorke\Desktop\SimilarCode_new.db",
                 ToMatchPath = @"C:\Users\Alex Yorke\Desktop\test_similar_code.cs",
-                MaxThreads = 4
+                MaxThreads = Environment.ProcessorCount
             };
 
             var cliOptions = debug ? debugCliOptions : await GetCliOptions(args);
