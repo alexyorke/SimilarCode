@@ -11,30 +11,6 @@ using SimilarCode.Load.Repositories;
 
 namespace SimilarCode.Match
 {
-    internal static partial class Extensions
-    {
-        public static int Occurences(this string str, string val)
-        {
-            int occurrences = 0;
-            int startingIndex = 0;
-
-            while ((startingIndex = str.IndexOf(val, startingIndex)) >= 0)
-            {
-                ++occurrences;
-                ++startingIndex;
-            }
-
-            return occurrences;
-        }
-    }
-
-    internal class Page
-    {
-        public int prevId;
-        public int currId;
-
-        public int lastId { get; set; }
-    }
     public class Program
     {
         private BlockingCollection<StrongBox<string>> _snippetsToCheck = new(200_000);
