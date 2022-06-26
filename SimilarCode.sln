@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimilarCode.Match.Cli", "Si
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimilarCode.IndependentMatch.Cli", "SimilarCode.IndependentMatch.Cli\SimilarCode.IndependentMatch.Cli.csproj", "{F5BE0208-BD04-4F4D-AE79-C12F05BB7F1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimilarCode.Compression", "SimilarCode.Compression\SimilarCode.Compression.csproj", "{7BF172A2-0BC0-4410-B91F-BF1E46BE517A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimilarCode.Compression", "SimilarCode.Compression\SimilarCode.Compression.csproj", "{7BF172A2-0BC0-4410-B91F-BF1E46BE517A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimilarCode.VectorDatabase", "SimilarCode.VectorDatabase\SimilarCode.VectorDatabase.csproj", "{CF88FA0B-1D34-4817-8BE0-04147C9F9FA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,6 +103,14 @@ Global
 		{7BF172A2-0BC0-4410-B91F-BF1E46BE517A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7BF172A2-0BC0-4410-B91F-BF1E46BE517A}.Release|x64.ActiveCfg = Release|Any CPU
 		{7BF172A2-0BC0-4410-B91F-BF1E46BE517A}.Release|x64.Build.0 = Release|Any CPU
+		{CF88FA0B-1D34-4817-8BE0-04147C9F9FA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF88FA0B-1D34-4817-8BE0-04147C9F9FA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF88FA0B-1D34-4817-8BE0-04147C9F9FA3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CF88FA0B-1D34-4817-8BE0-04147C9F9FA3}.Debug|x64.Build.0 = Debug|Any CPU
+		{CF88FA0B-1D34-4817-8BE0-04147C9F9FA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF88FA0B-1D34-4817-8BE0-04147C9F9FA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF88FA0B-1D34-4817-8BE0-04147C9F9FA3}.Release|x64.ActiveCfg = Release|Any CPU
+		{CF88FA0B-1D34-4817-8BE0-04147C9F9FA3}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

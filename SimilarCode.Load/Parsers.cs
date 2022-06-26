@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -14,6 +15,79 @@ namespace SimilarCode.Load
         private static readonly Regex CodeBlocksMatcher = new(
             @"(?:<pre>|<pre class=\""[A-Za-z0-9 \-_]+\"">)<code>(.*?)</code></pre>",
             RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
+
+        private static List<char> programmingChars = new List<char>
+        {
+            '!',
+            '"',
+            '#',
+            '$',
+            '%',
+            '&',
+            '\'',
+            '(',
+            ')',
+            '*',
+            '+',
+            ',',
+            '-',
+            '.',
+            '/',
+            '0',
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            ':',
+            ';',
+            '<',
+            '=',
+            '>',
+            '?',
+            '@',
+            '[',
+            '\\',
+            ']',
+            '^',
+            '_',
+            '`',
+            'a',
+            'b',
+            'c',
+            'd',
+            'e',
+            'f',
+            'g',
+            'h',
+            'i',
+            'j',
+            'k',
+            'l',
+            'm',
+            'n',
+            'o',
+            'p',
+            'q',
+            'r',
+            's',
+            't',
+            'u',
+            'v',
+            'w',
+            'x',
+            'y',
+            'z',
+            '{',
+            '|',
+            '}',
+            '~'
+        };
+
         public IEnumerable<CodeSnippetGrouping> Extract(string content)
         {
             // normally, parsing HTML with a regex is considered very bad practice
@@ -23,12 +97,33 @@ namespace SimilarCode.Load
             var codeBlocks = CodeBlocksMatcher.Matches(content).Select(n => n.Groups[1]).Select(p => p.Value).ToList();
 
             if (!codeBlocks.Any()) yield break;
+
             yield return new CodeSnippetGrouping
             {
                 CodeSnippets = codeBlocks
                     .Select(c => Cleanup(c))
-                    .Select(codeBlock => new CodeSnippet { Content = codeBlock, ContentLowerNoWhitespace = RemoveWhitespace.Replace(codeBlock, "").ToLowerInvariant() }).ToList()
+                    .Select(codeBlock => new CodeSnippet { Content = codeBlock,
+                        ContentLowerNoWhitespace = RemoveWhitespace.Replace(codeBlock, "").ToLowerInvariant(),
+                        ContentAsVector = string.Join(",", ConvertSnippetToVector(RemoveWhitespace.Replace(codeBlock, "").ToLowerInvariant()))
+                    }).ToList()
             };
+        }
+
+        private static List<ushort> ConvertSnippetToVector(string code)
+        {
+            var arr = new ushort[programmingChars.Count];
+            foreach (var c in code)
+            {
+                if (programmingChars.Contains(c))
+                {
+                    unchecked
+                    {
+                        arr[programmingChars.IndexOf(c)]++;
+                    }
+                }
+            }
+
+            return new List<ushort>(arr);
         }
 
         private static string Cleanup(string code)

@@ -12,7 +12,7 @@ namespace SimilarCode.Load.Cli
 
             foreach (var answersToWrite in dbWriter.GetConsumingEnumerable().ChunksOf(100_000))
             {
-                using var answersRepo = new AnswersRepository(dbPath);
+                using ICodeRepository answersRepo = new AnswersH5Repository(dbPath);
                 await answersRepo.AddRangeAsync(answersToWrite.Select(a => a.Item).ToList());
 
                 // update progress bar

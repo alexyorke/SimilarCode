@@ -35,7 +35,7 @@ namespace SimilarCode.Load
             // process answers
             ISnippetExtractor stackoverflowExtractor = new StackOverflowSnippetExtractor();
             IMaliciousSoftwareScanner scanner = Environment.OSVersion.Platform == PlatformID.Win32NT
-                ? new Amsi()
+                ? new NullCodeScanner()
                 : new NullCodeScanner();
 
             _answersToProcess.GetConsumingEnumerable().AsParallel().WithDegreeOfParallelism(cliOptions.MaxThreads).ForAll(answerProgressItem =>

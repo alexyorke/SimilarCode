@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Numerics;
 
 namespace SimilarCode.Load.Models
 {
@@ -13,5 +14,6 @@ namespace SimilarCode.Load.Models
         public List<ProgrammingLanguage> ProgrammingLanguage { get; set; } = new();
         public CodeSnippetGrouping CodeSnippetGrouping { get; set; }
         public string ContentLowerNoWhitespace { get; set; }
+        public string ContentAsVector { get; set; }
     }
 }

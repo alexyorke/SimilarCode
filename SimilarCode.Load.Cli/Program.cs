@@ -11,7 +11,7 @@ namespace SimilarCode.Load.Cli
             const bool debug = true;
             var debugCliOptions = new CliOptions
             {
-                DbPath = @"C:\Users\Alex Yorke\Desktop\SimilarCode_new.db",
+                DbPath = @"C:\Users\Alex Yorke\Desktop\SimilarCode.db",
                 MaxThreads = 20,
                 SoPostsPath = @"Z:\stackoverflow\stackoverflow.com-Posts\Posts.xml"
             };

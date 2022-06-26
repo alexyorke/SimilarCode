@@ -5,7 +5,7 @@ using SimilarCode.Load.Models;
 
 namespace SimilarCode.Load.Repositories
 {
-    public class AnswersRepository : IDisposable, ICodeRepository
+    public class AnswersRepository : ICodeRepository
     {
         private readonly AnswersContext _context;
         public AnswersRepository(string? dbPath)

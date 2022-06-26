@@ -88,7 +88,7 @@ namespace SimilarCode.Load.Repositories
 
                     var answer = new Answer
                     {
-                        Id = Convert.ToInt32(doc["Id"]),
+                        Id = Convert.ToInt32(doc.DocumentElement.Attributes["Id"]?.InnerText),
                         Body = body
                     };
 

@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
+    <PackageReference Include="HDF5-CSharp" Version="1.13.4" />
   </ItemGroup>
 
   <ItemGroup>
