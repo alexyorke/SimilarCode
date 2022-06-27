@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="FluentArgs" Version="0.9.7" />
     <PackageReference Include="HDF5-CSharp" Version="1.13.4" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>

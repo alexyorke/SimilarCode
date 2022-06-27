@@ -3,29 +3,26 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Numerics;
-using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using System.Text.RegularExpressions;
+using System.Runtime.Intrinsics.X86;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using SimilarCode.Load.Repositories;
 
 namespace SimilarCode.Match
 {
     public class Program
     {
-        private List<int[]> _snippetsToCheck = new();
+        private int[][] _snippetsToCheck;
 
-        private async Task GetAnswers(string similarCodeDatabasePath, string mustContain)
+        private void GetAnswers(string similarCodeDatabasePath)
         {
-            var currLine = 0;
             const int totalLines = 33496610;
-            foreach (var snippet in ReadCsv(@"C:\Users\Alex Yorke\Desktop\SimilarCode.db"))
-            {
-                _snippetsToCheck.Add(Array.ConvertAll(snippet, int.Parse));
+            _snippetsToCheck = new int[totalLines][];
+            var currLine = 0;
 
+            foreach (var snippet in ReadCsv(similarCodeDatabasePath))
+            {
+                _snippetsToCheck[currLine] = snippet;
                 if (currLine % 100_000 == 0)
                 {
                     Console.WriteLine(currLine / (decimal)totalLines);
@@ -33,58 +30,53 @@ namespace SimilarCode.Match
 
                 currLine++;
             }
-
-            Console.WriteLine("Finished loading database");
-            Console.WriteLine("Waiting 10 seconds...");
-            await Task.Delay(TimeSpan.FromSeconds(10));
         }
 
-        private IEnumerable<string[]> ReadCsv(string path)
+        private static IEnumerable<int[]> ReadCsv(string path)
         {
-            using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None, 64 * 1024, FileOptions.SequentialScan))
-            using (var reader = new StreamReader(fs))
+            using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None, 64 * 1024, FileOptions.SequentialScan);
+            using var reader = new StreamReader(fs);
+            while (reader.ReadLine() is { } line)
             {
-                string line = reader.ReadLine();
-                while ((line = reader.ReadLine()) != null)
-                {
-                    yield return line.Split(',');
-                }
+                yield return Array.ConvertAll(line.Split(','), int.Parse);
             }
         }
 
-        public async Task<Tuple<string, double>> Start(string needle, string databasePath)
+        public Tuple<string, double> Start(string needle, string databasePath)
         {
             needle = needle.ToLower();
-            var needleThumbprint = Utilities.ConvertSnippetToVector(needle).ToArray();
+            var needleArray = Utilities.ConvertSnippetToVector(needle).Select(Convert.ToInt32).ToArray();
 
-            Task getSnippets = new(() => GetAnswers(databasePath, ""), TaskCreationOptions.LongRunning);
+            Task getSnippets = new(() => GetAnswers(databasePath), TaskCreationOptions.LongRunning);
             getSnippets.Start();
-            await getSnippets;
+            getSnippets.Wait();
+
             var start = DateTime.Now;
 
             var bestSnippets = new ConcurrentBag<Tuple<string, double>>();
 
             double lowestPenalty = Double.MaxValue;
-            var totalSnippets = _snippetsToCheck.Count;
+            var totalSnippets = _snippetsToCheck.Length;
             var snippetsProcessedSoFar = 0;
 
-            Parallel.ForEach(_snippetsToCheck, new ParallelOptions
+            _snippetsToCheck.AsParallel().ForAll(answerAndSnippet =>
             {
-                MaxDegreeOfParallelism = Environment.ProcessorCount
-            }, snippet =>
-            {
-                // TODO: find similar snippets based on character frequency (and theoretical largest penalty)
+                if (answerAndSnippet == null) return;
+                var answerAndSnipperAsSpan = answerAndSnippet.AsSpan();
 
+                var snippetBody = answerAndSnipperAsSpan[1..];
                 double penalty = 0;
-                for (int i = 1; i < snippet.Length; i++)
+
+                for (int i = 0; i < needleArray.Length; i++)
                 {
-                    penalty += Math.Pow((snippet[i] - needleThumbprint[i]), 2);
+                    penalty += Math.Pow(needleArray[i] - snippetBody[i], 2);
                 }
 
                 if (penalty < lowestPenalty)
                 {
+                    var answerId = answerAndSnipperAsSpan[0];
                     Interlocked.Exchange(ref lowestPenalty, penalty);
-                    bestSnippets.Add(Tuple.Create(snippet[0].ToString(), penalty));
+                    bestSnippets.Add(Tuple.Create(answerId.ToString(), penalty));
                 }
 
                 Interlocked.Increment(ref snippetsProcessedSoFar);
@@ -93,8 +85,6 @@ namespace SimilarCode.Match
                     Console.WriteLine(snippetsProcessedSoFar + "/" + totalSnippets);
                 }
             });
-
-            await getSnippets;
 
             var bestSnippet = bestSnippets.ToList().MinBy(c => c.Item2);
 

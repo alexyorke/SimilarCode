@@ -76,20 +76,18 @@ public static class Utilities
         '~'
     };
 
-    public static List<ushort> ConvertSnippetToVector(string code)
+    public static List<int> ConvertSnippetToVector(string code)
     {
-        var arr = new ushort[programmingChars.Count];
+        var arr = new int[programmingChars.Count];
         foreach (var c in code)
         {
-            if (programmingChars.Contains(c))
+            var i = programmingChars.IndexOf(c);
+            if (i != -1)
             {
-                unchecked
-                {
-                    arr[programmingChars.IndexOf(c)]++;
-                }
+                arr[i]++;
             }
         }
 
-        return new List<ushort>(arr);
+        return new List<int>(arr);
     }
 }

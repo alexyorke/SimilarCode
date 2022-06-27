@@ -7,7 +7,7 @@ namespace SimilarCode.Match.Cli
 {
     class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             const bool debug = true;
             var debugCliOptions = new CliOptions
@@ -17,9 +17,9 @@ namespace SimilarCode.Match.Cli
                 MaxThreads = Environment.ProcessorCount
             };
 
-            var cliOptions = debug ? debugCliOptions : await GetCliOptions(args);
+            var cliOptions = debug ? debugCliOptions : GetCliOptions(args).Result;
             var matcher = new Match.Program();
-            var output = await matcher.Start(File.ReadAllText(cliOptions.ToMatchPath), cliOptions.DbPath);
+            var output = matcher.Start(File.ReadAllText(cliOptions.ToMatchPath), cliOptions.DbPath);
             Console.WriteLine(output.Item1);
         }
 

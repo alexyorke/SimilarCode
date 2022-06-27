@@ -115,21 +115,19 @@ namespace SimilarCode.Load.Repositories
             '~'
         };
 
-        public static List<double> ConvertSnippetToVector(string code)
+        public static List<int> ConvertSnippetToVector(string code)
         {
-            var arr = new double[programmingChars.Count];
+            var arr = new int[programmingChars.Count];
             foreach (var c in code)
             {
-                if (programmingChars.Contains(c))
+                var i = programmingChars.IndexOf(c);
+                if (i != -1)
                 {
-                    unchecked
-                    {
-                        arr[programmingChars.IndexOf(c)]++;
-                    }
+                    arr[i]++;
                 }
             }
 
-            return new List<double>(arr);
+            return new List<int>(arr);
         }
     }
 }
