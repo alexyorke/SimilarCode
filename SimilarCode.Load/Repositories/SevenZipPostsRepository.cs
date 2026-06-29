@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
-using SharpCompress.Archives.SevenZip;
+using SharpCompress.Archives;
+using SharpCompress.Readers;
 using SimilarCode.Load.Models;
 
 namespace SimilarCode.Load.Repositories
@@ -20,7 +21,7 @@ namespace SimilarCode.Load.Repositories
 
         public IEnumerable<(long ReadOffset, long totalSize, Answer answer)> GetAllAnswersAsync()
         {
-            using var archive = SevenZipArchive.Open(this._sourcePath);
+            using var archive = ArchiveFactory.OpenArchive(this._sourcePath, new ReaderOptions());
             var firstFile = archive.Entries.First();
             var totalSize = firstFile.Size;
             XmlReaderSettings settings = new XmlReaderSettings
