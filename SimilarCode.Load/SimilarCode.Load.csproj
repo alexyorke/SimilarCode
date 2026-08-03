@@ -39,7 +39,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="SharpCompress" Version="0.49.1" />
+    <PackageReference Include="SharpCompress" Version="0.50.3" />
     <PackageReference Include="SimpleExec" Version="12.0.0" />
     <PackageReference Include="System.Linq.Async" Version="7.0.1" />
   </ItemGroup>
